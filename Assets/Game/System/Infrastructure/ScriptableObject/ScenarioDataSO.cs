@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -21,9 +21,9 @@ public class ScenarioDataSO : ScriptableObject
         {
             TextAsset textAsset = Resources.Load<TextAsset>(fileName);
 
-            // CSVƒf[ƒ^‚ğ‰ğÍ‚µ‚ÄƒŠƒXƒg‚ÉŠi”[
             if (textAsset == null) return;
 
+            // CSVãƒ‡ãƒ¼ã‚¿ã‚’è§£æã—ã¦ãƒªã‚¹ãƒˆã«æ ¼ç´
             List<string> scenarioList = new ();
             StringReader reader = new (textAsset.text);
             while (reader.Peek() != -1)
