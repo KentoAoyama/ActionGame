@@ -4,5 +4,6 @@
 public enum CharacterType
 {
     P,
-    U
+    U,
+    None
 }

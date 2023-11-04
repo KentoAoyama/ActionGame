@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// オーバーレイ表示の会話UIを管理するクラス
+/// </summary>
 public class OverlayTalkUI : MonoBehaviour
 {
     [SerializeField]

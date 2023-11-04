@@ -3,12 +3,21 @@ using System.Collections.Generic;
 /// <summary>
 /// シナリオのデータを格納する構造体
 /// </summary>
-public struct ScenarioData
+public readonly struct ScenarioData
 {
-    public ScenarioData(SpeakData[] scenarioData)
+    public ScenarioData(List<SpeakEventData> scenarioData)
     {
-        SpeakData = scenarioData;
+        // シナリオデータが空の場合はエラー
+        if (scenarioData.Count == 0)
+        {
+
+            throw new System.Exception("シナリオデータが不正です");
+        }
+        else
+        {
+            SpeakData = scenarioData;
+        }
     }
 
-    public SpeakData[] SpeakData;
+    public readonly List<SpeakEventData> SpeakData;
 }

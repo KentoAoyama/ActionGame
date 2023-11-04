@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// オーバーレイ表示のUIを管理するクラス
+/// </summary>
 public class OverlayDisplayService : MonoBehaviour, IOverlayDisplayService
 {
     [SerializeField]
