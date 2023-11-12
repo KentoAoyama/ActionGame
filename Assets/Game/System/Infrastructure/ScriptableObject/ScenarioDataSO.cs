@@ -11,19 +11,27 @@ public class ScenarioDataSO : ScriptableObject
     // ScenarioDataを格納するDictionary
     public Dictionary<string, ScenarioData> _scenarioData = new();
 
-    public readonly struct ViewScenarioData
+    // インスペクターにScenerioDataを表示するための構造体
+    [System.Serializable]
+    public struct InspectorViewScenarioData
     {
-        public ViewScenarioData(string fileName, List<string> talkData)
+        public InspectorViewScenarioData(string fileName, string talkData)
         {
             FileName = fileName;
             TalkData = talkData;
         }
 
-        public readonly string FileName;
-        public readonly List<string> TalkData;
+        // シナリオファイル名
+        public string FileName;
+
+        // インスペクターにScenerioDataを表示するための文字列
+        [TextArea(3, 10)]
+        public string TalkData;
     }
 
-    public List<ViewScenarioData> ScenarioDataList;
+    [SerializeField]
+    private List<InspectorViewScenarioData> _scenarioDataList;
+    public List<InspectorViewScenarioData> ScenarioDataList => _scenarioDataList;
 
 
     private void OnEnable()
@@ -42,13 +50,13 @@ public class ScenarioDataSO : ScriptableObject
         if (scenarioFileNameSO.FileNames == null) return;
 
         // シナリオデータを格納するDictionaryを初期化
-        if (ScenarioDataList == null)
+        if (_scenarioDataList == null)
         {
-            ScenarioDataList = new List<ViewScenarioData>();
+            _scenarioDataList = new List<InspectorViewScenarioData>();
         }
         else
         {
-            ScenarioDataList.Clear();
+            _scenarioDataList.Clear();
         }
 
         foreach (string fileName in scenarioFileNameSO.FileNames)
@@ -70,7 +78,7 @@ public class ScenarioDataSO : ScriptableObject
             List<SpeakEventData> speakDataList = new();
 
             // インスペクターにScenerioDataを表示するためのリスト
-            List<string> talkData = new();
+            string talkData = "";
 
             while (reader.Peek() != -1)
             {
@@ -78,11 +86,12 @@ public class ScenarioDataSO : ScriptableObject
 
                 // CSVデータをSpeakDataに変換してリストに格納
                 SpeakEventData speakData = new(data[0], data[1]);
+
+                // リストに格納
                 speakDataList.Add(speakData);
 
-                // インスペクターにScenerioDataを表示するためのリストに格納
-                talkData.Add(
-                    speakData.CharacterType.ToString() + "\n" + speakData.SpeakText);
+                // インスペクターにScenerioDataを表示するための文字列に格納
+                talkData += $"{speakData.CharacterType} : {speakData.SpeakText}\n";
             }
 
             ScenarioData scenarioData = new(speakDataList);
@@ -90,7 +99,7 @@ public class ScenarioDataSO : ScriptableObject
             // Dictionaryに格納
             _scenarioData.Add(fileName, scenarioData);
             // View用のデータを格納
-            ScenarioDataList.Add(new ViewScenarioData(fileName, talkData));
+            _scenarioDataList.Add(new InspectorViewScenarioData(fileName, talkData));
         }
     }
 }
