@@ -9,7 +9,8 @@ public class ScenarioDataSO : ScriptableObject
     private const string SCENARIOFILE_NAME = "ScenarioFileNameSO";
 
     // ScenarioDataを格納するDictionary
-    public Dictionary<string, ScenarioData> _scenarioData = new();
+    private Dictionary<string, ScenarioData> _scenarioDataDictionary;
+    public Dictionary<string, ScenarioData> ScenarioDataDictionary => _scenarioDataDictionary;
 
     // インスペクターにScenerioDataを表示するための構造体
     [System.Serializable]
@@ -29,9 +30,10 @@ public class ScenarioDataSO : ScriptableObject
         public string TalkData;
     }
 
+
+    [Header("格納されているシナリオのデータ（Dictionary）")]
     [SerializeField]
-    private List<InspectorViewScenarioData> _scenarioDataList;
-    public List<InspectorViewScenarioData> ScenarioDataList => _scenarioDataList;
+    private List<InspectorViewScenarioData> _scenarioData;
 
 
     private void OnEnable()
@@ -45,18 +47,29 @@ public class ScenarioDataSO : ScriptableObject
     public void SetScenarioData()
     {
         // ScenarioFileNameSOをResourcesフォルダから取得
-        ScenarioFileNameSO scenarioFileNameSO = Resources.Load<ScenarioFileNameSO>("ScriptableObject/" + SCENARIOFILE_NAME);
+        ScenarioFileNameSO scenarioFileNameSO = 
+            Resources.Load<ScenarioFileNameSO>("ScriptableObject/" + SCENARIOFILE_NAME);
 
         if (scenarioFileNameSO.FileNames == null) return;
 
         // シナリオデータを格納するDictionaryを初期化
-        if (_scenarioDataList == null)
+        if (_scenarioDataDictionary == null)
         {
-            _scenarioDataList = new List<InspectorViewScenarioData>();
+            _scenarioDataDictionary = new Dictionary<string, ScenarioData>();
         }
         else
         {
-            _scenarioDataList.Clear();
+            _scenarioDataDictionary.Clear();
+        }
+
+        // シナリオデータを格納するListを初期化
+        if (_scenarioData == null)
+        {
+            _scenarioData = new List<InspectorViewScenarioData>();
+        }
+        else
+        {
+            _scenarioData.Clear();
         }
 
         foreach (string fileName in scenarioFileNameSO.FileNames)
@@ -97,9 +110,9 @@ public class ScenarioDataSO : ScriptableObject
             ScenarioData scenarioData = new(speakDataList);
 
             // Dictionaryに格納
-            _scenarioData.Add(fileName, scenarioData);
+            _scenarioDataDictionary.Add(fileName, scenarioData);
             // View用のデータを格納
-            _scenarioDataList.Add(new InspectorViewScenarioData(fileName, talkData));
+            _scenarioData.Add(new InspectorViewScenarioData(fileName, talkData));
         }
     }
 }
