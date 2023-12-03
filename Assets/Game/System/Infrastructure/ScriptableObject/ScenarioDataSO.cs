@@ -47,7 +47,7 @@ public class ScenarioDataSO : ScriptableObject
     public void SetScenarioData()
     {
         // ScenarioFileNameSOをResourcesフォルダから取得
-        ScenarioFileNameSO scenarioFileNameSO = 
+        ScenarioFileNameSO scenarioFileNameSO =
             Resources.Load<ScenarioFileNameSO>("ScriptableObject/" + SCENARIOFILE_NAME);
 
         if (scenarioFileNameSO.FileNames == null) return;
@@ -83,9 +83,11 @@ public class ScenarioDataSO : ScriptableObject
             // CSVデータを格納
             StringReader reader = new(textAsset.text);
 
-            // 2行目までヘッダーなので読み飛ばす
-            reader.ReadLine();
-            reader.ReadLine();
+            // 不要な行を読み飛ばす
+            for (int i = 0; i < 2; i++)
+            {
+                reader.ReadLine();
+            }
 
             // 発言データを格納するリスト
             List<SpeakEventData> speakDataList = new();

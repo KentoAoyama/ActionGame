@@ -18,8 +18,9 @@ public class OverlayTalkText : MonoBehaviour, IUIComponent
     }
 
     // 非同期(UniTask)でテキストの表示を行う
-    public async UniTask SetTextAsync(string text)
+    public async UniTask SetTextAsync(string text, float duration)
     {
-        
+        _tmp.text = string.Empty;
+        await _tmp.DOText(text, duration);
     }
 }
