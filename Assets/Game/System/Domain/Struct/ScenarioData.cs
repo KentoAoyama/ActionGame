@@ -1,23 +1,21 @@
 using System.Collections.Generic;
 
-/// <summary>
-/// シナリオのデータを格納する構造体
-/// </summary>
+[System.Serializable]
 public readonly struct ScenarioData
 {
-    public ScenarioData(List<SpeakEventData> scenarioData)
+    public readonly List<SpeakData> SpeakData;
+
+    public ScenarioData(List<SpeakData> speakData)
     {
         // シナリオデータが空の場合はエラー
-        if (scenarioData.Count == 0)
+        if (speakData.Count == 0)
         {
 
             throw new System.Exception("シナリオデータが不正です");
         }
         else
         {
-            SpeakData = scenarioData;
+            SpeakData = speakData;
         }
     }
-
-    public readonly List<SpeakEventData> SpeakData;
 }
