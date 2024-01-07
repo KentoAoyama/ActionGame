@@ -3,24 +3,27 @@ using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using TMPro;
 
-/// <summary>
-/// オーバーレイ表示のテキストを表示するクラス
-/// </summary>
-[RequireComponent(typeof(TextMeshProUGUI))]
-public class TalkGUIText : MonoBehaviour, IUIComponent
+namespace Presentation
 {
-    [SerializeField]
-    private TextMeshProUGUI _tmp;
-
-    public void Initialized()
+    /// <summary>
+    /// オーバーレイ表示のテキストを表示するクラス
+    /// </summary>
+    [RequireComponent(typeof(TextMeshProUGUI))]
+    public class TalkGUIText : MonoBehaviour, IUIComponent
     {
-        _tmp.text = string.Empty;
-    }
+        [SerializeField]
+        private TextMeshProUGUI _tmp;
 
-    // 非同期(UniTask)でテキストの表示を行う
-    public async UniTask SetTextAsync(string text, float duration)
-    {
-        _tmp.text = string.Empty;
-        await _tmp.DOText(text, duration);
+        public void Initialized()
+        {
+            _tmp.text = string.Empty;
+        }
+
+        // 非同期(UniTask)でテキストの表示を行う
+        public async UniTask SetTextAsync(string text, float duration)
+        {
+            _tmp.text = string.Empty;
+            await _tmp.DOText(text, duration);
+        }
     }
 }

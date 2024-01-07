@@ -1,4 +1,8 @@
-public enum EventCodeType
+
+namespace Domain
 {
-    None
+    public enum EventCodeType
+    {
+        None
+    }
 }

@@ -1,9 +1,13 @@
-/// <summary>
-/// キャラクターを表す列挙型
-/// </summary>
-public enum CharacterType
+
+namespace Domain
 {
-    P,
-    U,
-    None
+    /// <summary>
+    /// キャラクターを表す列挙型
+    /// </summary>
+    public enum CharacterType
+    {
+        P,
+        U,
+        None
+    }
 }

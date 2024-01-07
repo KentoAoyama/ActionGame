@@ -1,30 +1,34 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using Domain;
 
-[CreateAssetMenu(fileName = "ScenarioDataSO", menuName = "ScriptableObject/ScenarioDataSO")]
-public class ScenarioDataSO : ScriptableObject
+namespace Infrastructure
 {
-    [SerializeField]
-    private List<SpeakData> _speakData;
-    public List<SpeakData> SpeakData => _speakData;
-
-    /// <param name="fileName">SO生成時にファイル名を設定する用</param>
-    /// <param name="speakDataList">シナリオのデータ</param>
-    public void Initialized(string fileName, List<SpeakData> speakDataList)
+    [CreateAssetMenu(fileName = "ScenarioDataSO", menuName = "ScriptableObject/ScenarioDataSO")]
+    public class ScenarioDataSO : ScriptableObject
     {
-        string path = AssetDatabase.GetAssetPath(this);
-        AssetDatabase.RenameAsset(path, fileName);
+        [SerializeField]
+        private List<SpeakData> _speakData;
+        public List<SpeakData> SpeakData => _speakData;
 
-        // シナリオデータが空の場合はエラー
-        if (speakDataList.Count == 0)
+        /// <param name="fileName">SO生成時にファイル名を設定する用</param>
+        /// <param name="speakDataList">シナリオのデータ</param>
+        public void Initialized(string fileName, List<SpeakData> speakDataList)
         {
+            string path = AssetDatabase.GetAssetPath(this);
+            AssetDatabase.RenameAsset(path, fileName);
 
-            throw new System.Exception("シナリオデータが不正です");
-        }
-        else
-        {
-            _speakData = speakDataList;
+            // シナリオデータが空の場合はエラー
+            if (speakDataList.Count == 0)
+            {
+
+                throw new System.Exception("シナリオデータが不正です");
+            }
+            else
+            {
+                _speakData = speakDataList;
+            }
         }
     }
 }

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IUIComponent
+namespace Presentation
 {
-    /// <summary>
-    /// シーン読み込み時に１度だけ呼び出される
-    /// </summary>
-    void Initialized();
+    public interface IUIComponent
+    {
+        /// <summary>
+        /// シーン読み込み時に１度だけ呼び出される
+        /// </summary>
+        void Initialized();
+    }
 }

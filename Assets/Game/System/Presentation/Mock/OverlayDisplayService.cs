@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Domain;
 
-/// <summary>
-/// オーバーレイ表示のUIを管理するクラス
-/// </summary>
-public class OverlayDisplayService : MonoBehaviour, IOverlayDisplayService
+namespace Presentation
 {
-    [SerializeField]
-    private TalkGUI _overlayTalkUI;
-
-
-    private void Awake()
+    /// <summary>
+    /// オーバーレイ表示のUIを管理するクラス
+    /// </summary>
+    public class OverlayDisplayService : MonoBehaviour, IOverlayDisplayService
     {
-        _overlayTalkUI.Initialized();
+        [SerializeField]
+        private TalkGUI _overlayTalkUI;
+
+
+        private void Awake()
+        {
+            _overlayTalkUI.Initialized();
+        }
     }
 }
