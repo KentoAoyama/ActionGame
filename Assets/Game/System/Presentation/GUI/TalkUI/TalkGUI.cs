@@ -6,13 +6,13 @@ using UnityEngine.UI;
 /// <summary>
 /// オーバーレイ表示の会話UIを管理するクラス
 /// </summary>
-public class OverlayTalkUI : MonoBehaviour
+public class TalkGUI : MonoBehaviour
 {
     [SerializeField]
-    private OverlayTalkText _upperTalkText;
+    private TalkGUIText _upperTalkText;
 
     [SerializeField]
-    private OverlayTalkText _lowerTalkText;
+    private TalkGUIText _lowerTalkText;
 
     public void Initialized()
     {

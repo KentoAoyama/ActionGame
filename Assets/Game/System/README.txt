@@ -4,7 +4,7 @@
 
 Application層
 - ゲームの進行など、実際の処理を行う
-- ユースケースの実行し、他の層の機能を用いながら進行を行う
+- ユースケースの実行をし、他の層の機能を用いながら進行を行う
 
 Infrastructure層
 - ゲームの基盤となる機能
@@ -14,3 +14,8 @@ Domain層
 - ゲームのルール＝ドメインを管理
 　- 値オブジェクト
 　- エンティティなど
+
+
+Presentation -> Application / Infrastructure / Domain
+Application -> Domain
+Infrastructure -> Domain

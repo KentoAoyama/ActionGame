@@ -1,3 +1,16 @@
 {
-	"name": "Domain"
+    "name": "Domain",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3f55540b1dc76504ab01e7243a821082"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

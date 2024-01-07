@@ -1,13 +1,13 @@
-using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using DG.Tweening;
+using Cysharp.Threading.Tasks;
+using TMPro;
 
 /// <summary>
 /// オーバーレイ表示のテキストを表示するクラス
 /// </summary>
 [RequireComponent(typeof(TextMeshProUGUI))]
-public class OverlayTalkText : MonoBehaviour, IUIComponent
+public class TalkGUIText : MonoBehaviour, IUIComponent
 {
     [SerializeField]
     private TextMeshProUGUI _tmp;

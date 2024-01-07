@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ScenarioDataListSO))]//拡張するクラスを指定
+[CustomEditor(typeof(ScenarioDataSOList))]//拡張するクラスを指定
 public class ScenarioDataLoadButton : Editor
 {
     /// <summary>
@@ -14,7 +14,7 @@ public class ScenarioDataLoadButton : Editor
         base.OnInspectorGUI();
 
         //targetを変換して対象を取得
-        ScenarioDataListSO scenarioSO = target as ScenarioDataListSO;
+        ScenarioDataSOList scenarioSO = target as ScenarioDataSOList;
 
         //PublicMethodを実行する用のボタン
         if (GUILayout.Button("Load"))

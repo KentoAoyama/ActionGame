@@ -1,17 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ScenarioDataSO", menuName = "ScriptableObject/ScenarioDataSO")]
 public class ScenarioDataSO : ScriptableObject
 {
-    [SerializeField, ReadOnly(true)]
-    private ScenarioData _scenarioData;
-    public ScenarioData ScenarioData => _scenarioData;
+    [SerializeField]
+    private List<SpeakData> _speakData;
+    public List<SpeakData> SpeakData => _speakData;
 
-    public ScenarioDataSO(ScenarioData scenarioData)
+    /// <param name="fileName">SO生成時にファイル名を設定する用</param>
+    /// <param name="speakDataList">シナリオのデータ</param>
+    public void Initialized(string fileName, List<SpeakData> speakDataList)
     {
-        _scenarioData = scenarioData;
+        string path = AssetDatabase.GetAssetPath(this);
+        AssetDatabase.RenameAsset(path, fileName);
+
+        // シナリオデータが空の場合はエラー
+        if (speakDataList.Count == 0)
+        {
+
+            throw new System.Exception("シナリオデータが不正です");
+        }
+        else
+        {
+            _speakData = speakDataList;
+        }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 public class OverlayDisplayService : MonoBehaviour, IOverlayDisplayService
 {
     [SerializeField]
-    private OverlayTalkUI _overlayTalkUI;
+    private TalkGUI _overlayTalkUI;
 
 
     private void Awake()

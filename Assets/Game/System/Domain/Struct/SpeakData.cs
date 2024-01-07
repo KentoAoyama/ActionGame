@@ -3,17 +3,29 @@ using UnityEngine;
 /// <summary>
 /// 発言の内容を格納する構造体
 /// </summary>
-public readonly struct SpeakData
+[System.Serializable]
+public struct SpeakData
 {
-    public readonly int TextPlace;
+    [SerializeField, ReadOnly]
+    private int _textPlace;
+    public readonly int TextPlace => _textPlace;
 
-    public readonly CharacterType CharacterType;
+    [SerializeField, ReadOnly]
+    private CharacterType _characterType;
+    public readonly CharacterType CharacterType => _characterType;
 
-    public readonly string SpeakText;
+    [SerializeField]
+    [TextArea(3, 1)]
+    private string _speakText;
+    public readonly string SpeakText => _speakText;
 
-    public readonly float ShowTextTime;
+    [SerializeField, ReadOnly]
+    private float _showTextTime;
+    public readonly float ShowTextTime => _showTextTime;
 
-    public readonly EventCodeType[] EventType;
+    [SerializeField, ReadOnly]
+    private EventCodeType[] _eventType;
+    public readonly EventCodeType[] EventType => _eventType;
 
     public SpeakData(int textPlace, string characterName, string speakText, float showTextTime, EventCodeType[] eventType)
     {
@@ -24,7 +36,7 @@ public readonly struct SpeakData
         }
         else
         {
-            TextPlace = textPlace;
+            _textPlace = textPlace;
         }
 
 
@@ -48,7 +60,7 @@ public readonly struct SpeakData
         }
         else
         {
-            CharacterType = characterType;
+            _characterType = characterType;
         }
 
 
@@ -59,7 +71,7 @@ public readonly struct SpeakData
         }
         else
         {
-            SpeakText = speakText;
+            _speakText = speakText;
         }
 
 
@@ -70,7 +82,7 @@ public readonly struct SpeakData
         }
         else
         {
-            ShowTextTime = showTextTime;
+            _showTextTime = showTextTime;
         }
 
 
@@ -81,7 +93,7 @@ public readonly struct SpeakData
         }
         else
         {
-            EventType = eventType;
+            _eventType = eventType;
         }
     }
 }
