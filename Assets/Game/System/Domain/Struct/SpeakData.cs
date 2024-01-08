@@ -8,23 +8,28 @@ namespace Domain
     [System.Serializable]
     public struct SpeakData
     {
+        [Header("テキストの場所番号")]
         [SerializeField, ReadOnly]
         private int _textPlace;
         public readonly int TextPlace => _textPlace;
 
+        [Header("キャラクターのタイプ")]
         [SerializeField, ReadOnly]
         private CharacterType _characterType;
         public readonly CharacterType CharacterType => _characterType;
 
+        [Header("発言内容")]
         [SerializeField]
         [TextArea(3, 1)]
         private string _speakText;
         public readonly string SpeakText => _speakText;
 
+        [Header("表示にかける時間")]
         [SerializeField, ReadOnly]
         private float _showTextTime;
         public readonly float ShowTextTime => _showTextTime;
 
+        [Header("イベントコード")]
         [SerializeField, ReadOnly]
         private EventCodeType[] _eventType;
         public readonly EventCodeType[] EventType => _eventType;
@@ -77,7 +82,7 @@ namespace Domain
             }
 
 
-            // 表示時間が不正な場合はエラー
+            // 表示にかける時間が不正な場合はエラー
             if (showTextTime < 0)
             {
                 throw new System.Exception("表示時間が不正です");

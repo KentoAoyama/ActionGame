@@ -9,8 +9,8 @@ namespace Infrastructure
     public class ScenarioDataSO : ScriptableObject
     {
         [SerializeField]
-        private List<SpeakData> _speakData;
-        public List<SpeakData> SpeakData => _speakData;
+        private List<SpeakData> _speakDataList;
+        public List<SpeakData> SpeakDataList => _speakDataList;
 
         /// <param name="fileName">SO生成時にファイル名を設定する用</param>
         /// <param name="speakDataList">シナリオのデータ</param>
@@ -23,11 +23,11 @@ namespace Infrastructure
             if (speakDataList.Count == 0)
             {
 
-                throw new System.Exception("シナリオデータが不正です");
+                throw new System.Exception($"ScenarioDataSO生成時に渡されるデータが不正です\nファイル名：{fileName}");
             }
             else
             {
-                _speakData = speakDataList;
+                _speakDataList = speakDataList;
             }
         }
     }

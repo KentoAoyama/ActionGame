@@ -17,7 +17,7 @@ namespace Infrastructure
 
         // Inspectorに表示するシナリオデータのリスト
         [SerializeField, ReadOnly]
-        private List<string> _inspectorViewScenarioList;
+        private List<ScriptableObject> _inspectorViewScenarioSOList;
 
         // このScriptableObjectが有効になったときに呼び出される
         private void Awake()
@@ -47,13 +47,13 @@ namespace Infrastructure
             }
 
             // Inspectorに表示するシナリオデータのリストを初期化
-            if (_inspectorViewScenarioList == null)
+            if (_inspectorViewScenarioSOList == null)
             {
-                _inspectorViewScenarioList = new List<string>();
+                _inspectorViewScenarioSOList = new List<ScriptableObject>();
             }
             else
             {
-                _inspectorViewScenarioList.Clear();
+                _inspectorViewScenarioSOList.Clear();
             }
 
             foreach (string fileName in scenarioFileNameSO.FileNames)
@@ -73,7 +73,7 @@ namespace Infrastructure
                 // Dictionaryに格納
                 _scenarioDataDictionary.Add(fileName, scenarioDataSO);
 
-                _inspectorViewScenarioList.Add(fileName);
+                _inspectorViewScenarioSOList.Add(scenarioDataSO);
             }
 
             Debug.Log("全てのシナリオデータの格納終了");
