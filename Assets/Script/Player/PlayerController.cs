@@ -43,13 +43,13 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// ƒNƒ‰ƒX‚Ì‰Šú‰»ˆ—‚ğs‚¤
     /// </summary>
-    public void Initialized()
+    private void Start()
     {
         _move.Initialized();
         _stateMachine.Initialized(new PlayerIdleState(this));
     }
 
-    void Update()
+    private void Update()
     {
         _animation.Update(_move.CurrentMoveSpeed);
         _stateMachine.Update();

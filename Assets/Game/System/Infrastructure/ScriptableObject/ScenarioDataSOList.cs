@@ -19,6 +19,10 @@ namespace Infrastructure
         [SerializeField, ReadOnly]
         private List<ScriptableObject> _inspectorViewScenarioSOList;
 
+        // ヘッダー行を読み飛ばす行数
+        private const int SKIP_LINE_COUNT = 4;
+
+
         // このScriptableObjectが有効になったときに呼び出される
         private void Awake()
         {
@@ -104,7 +108,7 @@ namespace Infrastructure
             // 発言データを格納するリスト
             List<SpeakData> speakDataList = new();
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < SKIP_LINE_COUNT; i++)
             {
                 // ヘッダー行を読み飛ばす
                 reader.ReadLine();
