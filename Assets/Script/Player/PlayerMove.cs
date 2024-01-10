@@ -21,41 +21,48 @@ public class PlayerMove
     [SerializeField]
     private float _stopAcceleration = 1f;
 
+    private Rigidbody _rb;
+
     private float _currentMoveSpeed = 0f;
     public float CurrentMoveSpeed => _currentMoveSpeed;
 
     private Vector3 _currentVeclocity;
 
-    public void Initialized()
+    private Vector3 _localVelocity;
+    public Vector3 LocalVeclocity => _localVelocity;
+
+    public void Initialized(Rigidbody rb)
     {
+        _rb = rb;
+
         _currentMoveSpeed = 0;
     }
 
     /// <summary>
     /// Playerの移動に関する処理を定義するメソッド
     /// </summary>
-    public void Move(Transform moveTransform, Rigidbody rb, Vector2 moveDir)
+    public void Move(Transform moveTransform, Vector2 inputDir)
     {
         var deltaTime = Time.deltaTime;
 
         //入力があるかどうか確認
-        if (moveDir != Vector2.zero)
+        if (inputDir != Vector2.zero)
         {
             //移動をする方向をカメラの向きを参照したものにする
-            var velocity = Vector3.right * moveDir.x + Vector3.forward * moveDir.y;
+            var velocity = Vector3.right * inputDir.x + Vector3.forward * inputDir.y;
             velocity = Camera.main.transform.TransformDirection(velocity);
             velocity.y = 0f;
-            velocity = _speed/* * deltaTime*/ * velocity.normalized;
-            velocity.y = rb.velocity.y;
+            velocity = _speed * velocity.normalized;
+            velocity.y = _rb.velocity.y;
 
             //移動の速度を球面線形補間する
             _currentMoveSpeed += deltaTime / _moveAcceleration;
             _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
-            Vector3 targetVelo = new(0f, rb.velocity.y, 0f);
+            Vector3 targetVelo = new(0f, _rb.velocity.y, 0f);
             velocity = Vector3.Slerp(targetVelo, velocity, _currentMoveSpeed);
 
             //移動を行う処理
-            rb.velocity = velocity;
+            _rb.velocity = velocity;
 
             //向きを徐々に変更する
             Quaternion changeRotation = default;
@@ -77,7 +84,9 @@ public class PlayerMove
         {
             _currentMoveSpeed -= deltaTime / _stopAcceleration;
             _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
-            rb.velocity = Vector3.Slerp(Vector3.zero, _currentVeclocity, _currentMoveSpeed);
+            _rb.velocity = Vector3.Slerp(Vector3.zero, _currentVeclocity, _currentMoveSpeed);
         }
+
+            _localVelocity = moveTransform.InverseTransformDirection(_rb.velocity);
     }
 }

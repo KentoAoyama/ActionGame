@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Rigidbody _rb;
 
+    [Tooltip("Player‚ÌTransform")]
+    [SerializeField]
+    private Transform _transform;
+
     [Tooltip("Player‚ÌˆÚ“®‚ÉŠÖ‚·‚éˆ—‚ğ’è‹`‚·‚éƒNƒ‰ƒX")]
     [SerializeField]
     private PlayerMove _move;
@@ -45,13 +49,16 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _move.Initialized();
+        _move.Initialized(_rb);
         _stateMachine.Initialized(new PlayerIdleState(this));
     }
 
     private void Update()
     {
-        _animation.Update(_move.CurrentMoveSpeed);
+        _animation.Update(
+           _move.LocalVeclocity,
+           _move.CurrentMoveSpeed);
+
         _stateMachine.Update();
     }
 
@@ -61,8 +68,7 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         _move.Move(
-            gameObject.transform,
-            _rb,
+            _transform,
             _input.GetMoveDir());
     }
 
@@ -71,7 +77,7 @@ public class PlayerController : MonoBehaviour
         //_attack.BulletShoot(
         //    _input.GetAim(),
         //    _input.GetShoot(),
-        //    transform.position);
+        //    _transform);
 
         //_attack.ShootPositionSet();
 

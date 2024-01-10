@@ -20,33 +20,31 @@ public class PlayerAnimation
     /// <summary>
     /// PlayerController内のUpdateで行う処理
     /// </summary>
-    public void Update(float speed)
+    public void Update(Vector3 velocity, float moveSpeed)
     {
-        WalkParameterSet(speed);
+        WalkParameterSet(
+            new Vector2(velocity.x, velocity.z),
+            moveSpeed);
     }
 
     /// <summary>
     /// 移動時のアニメーションを受け取る
     /// </summary>
-    private void WalkParameterSet(float speed)
+    private void WalkParameterSet(Vector2 velocity, float moveSpeed)
     {
+        velocity = velocity.normalized;
+
         _animator.SetFloat(
-            "Speed",
-            speed);
-    }
+            "SpeedX",
+            velocity.x);
 
-    public void JumpParameterSet(bool isJump)
-    {
-        _animator.SetBool(
-            "IsJump",
-            isJump);
-    }
+        _animator.SetFloat(
+            "SpeedZ",
+            velocity.y);
 
-    public void IsGroundParameterSet(bool isGround)
-    {
-        _animator.SetBool(
-            "IsGround",
-            isGround);
+        _animator.SetFloat(
+            "MoveSpeed",
+            moveSpeed);
     }
 
     public void SetIK(Transform shootPos)
@@ -75,7 +73,6 @@ public class PlayerAnimation
         //if (isAim)
         //{
         //    weight = 1f;
-        //    Debug.Log("OK");
         //}
 
         //_handPositionWeight = weight;
