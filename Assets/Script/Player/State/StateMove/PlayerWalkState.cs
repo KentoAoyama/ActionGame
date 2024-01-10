@@ -27,6 +27,7 @@ public class PlayerWalkState : IPlayerState
 
         _player.Attack();
         _player.Move();
+        _player.LookRotationCameraDirMoveState();
     }
 
     public void Exit()

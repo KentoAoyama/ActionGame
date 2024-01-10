@@ -20,31 +20,25 @@ public class PlayerAnimation
     /// <summary>
     /// PlayerController内のUpdateで行う処理
     /// </summary>
-    public void Update(Vector3 velocity, float moveSpeed)
+    public void Update(Vector3 moveDir, float moveSpeed, float turnSpeed)
     {
-        WalkParameterSet(
-            new Vector2(velocity.x, velocity.z),
-            moveSpeed);
-    }
-
-    /// <summary>
-    /// 移動時のアニメーションを受け取る
-    /// </summary>
-    private void WalkParameterSet(Vector2 velocity, float moveSpeed)
-    {
-        velocity = velocity.normalized;
+        moveDir = moveDir.normalized;
 
         _animator.SetFloat(
             "SpeedX",
-            velocity.x);
+            moveDir.x);
 
         _animator.SetFloat(
             "SpeedZ",
-            velocity.y);
+            moveDir.y);
 
         _animator.SetFloat(
             "MoveSpeed",
             moveSpeed);
+
+        _animator.SetFloat(
+            "TurnSpeed",
+            turnSpeed);
     }
 
     public void SetIK(Transform shootPos)

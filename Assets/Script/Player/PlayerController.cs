@@ -49,15 +49,18 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        _move.Initialized(_rb);
+        Cursor.lockState = CursorLockMode.Locked;
+
+        _move.Initialized(_rb, _transform);
         _stateMachine.Initialized(new PlayerIdleState(this));
     }
 
     private void Update()
     {
         _animation.Update(
-           _move.LocalVeclocity,
-           _move.CurrentMoveSpeed);
+           _move.LocalMoveDir,
+           _move.CurrentMoveSpeed,
+           _move.TurnSpeed);
 
         _stateMachine.Update();
     }
@@ -67,9 +70,23 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        _move.Move(
-            _transform,
-            _input.GetMoveDir());
+        _move.Move(_input.GetMoveDir());
+    }
+
+    /// <summary>
+    /// •às‚ÉƒJƒƒ‰‚ÌŒü‚«‚ÉŒü‚«‚ğ•Ï‚¦‚éˆ—
+    /// </summary>
+    public void LookRotationCameraDirMoveState()
+    {
+        _move.LookRotationCameraDirMoveState();
+    }
+
+    /// <summary>
+    /// ’â~‚ÉƒJƒƒ‰‚ÌŒü‚«‚ÉŒü‚«‚ğ•Ï‚¦‚éˆ—
+    /// </summary>
+    public void LookRotationCameraDirIdleState()
+    {
+        _move.LookRotationCameraDirIdleState();
     }
 
     public void Attack()

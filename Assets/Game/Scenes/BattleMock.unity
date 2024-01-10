@@ -132,17 +132,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
-      propertyPath: _transform
-      value: 
-      objectReference: {fileID: 841375063}
-    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
-      propertyPath: _attack._crassHair
-      value: 
+      propertyPath: _move._rotationSpeed
+      value: 100
       objectReference: {fileID: 0}
-    - target: {fileID: 3355102629310327873, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
-      propertyPath: m_Avatar
-      value: 
-      objectReference: {fileID: 9000000, guid: fbcfc505a7877fc4fad4ca16478ca736, type: 3}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._turnAnimationBlendSpeed
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._stopRotationDeceleration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8645578620829469747, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
       propertyPath: m_Name
       value: Player
@@ -335,7 +335,7 @@ Transform:
   m_GameObject: {fileID: 753208836}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.61602706, y: 1.9526279, z: -1.5}
+  m_LocalPosition: {x: 0.61570495, y: 1.9, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -624,7 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ad980451443d70438faac0bc6c235a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 1, z: 0}
+  m_TrackedObjectOffset: {x: 0, y: 1.9, z: 0}
   m_LookaheadTime: 0
   m_LookaheadSmoothing: 0
   m_LookaheadIgnoreY: 0
@@ -633,7 +633,7 @@ MonoBehaviour:
   m_ZDamping: 0
   m_TargetMovementOnly: 1
   m_ScreenX: 0.3
-  m_ScreenY: 1.05
+  m_ScreenY: 0.5
   m_CameraDistance: 1.5
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
@@ -905,7 +905,7 @@ Transform:
   m_GameObject: {fileID: 1497706972}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.61602706, y: 1.9526279, z: -1.5}
+  m_LocalPosition: {x: 0.61570495, y: 1.9, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

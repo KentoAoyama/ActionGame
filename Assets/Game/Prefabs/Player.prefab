@@ -2266,11 +2266,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 919132148177967799}
+  _transform: {fileID: 8984843295367681673}
   _move:
     _speed: 7
-    _rotationSpeed: 500
+    _rotationSpeed: 200
     _moveAcceleration: 0.8
     _stopAcceleration: 0.4
+    _currentMoveSpeed: 0
   _attack:
     _bullet: {fileID: 8586260501902291268, guid: cf074b0995b779f4fbe04e2568d12fc5, type: 3}
     _rayLength: 10000
@@ -2292,7 +2294,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8645578620829469747}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 350bab497aaf72c4a833c446611cbc46, type: 3}
+  m_Avatar: {fileID: 9000000, guid: fbcfc505a7877fc4fad4ca16478ca736, type: 3}
   m_Controller: {fileID: 9100000, guid: 33757471cd0d9454eb05285f315b2174, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
