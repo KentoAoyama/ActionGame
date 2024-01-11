@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,10 +17,6 @@ public class PlayerMove
     [SerializeField]
     private float _stopRotationSpeed = 100f;
 
-    [Tooltip("停止時の向き変更を停止する際のアニメーションのブレンド速度")]
-    [SerializeField]
-    private float _turnAnimationBlendSpeed = 0.8f;
-
     [Tooltip("移動の加速度")]
     [SerializeField]
     private float _moveAcceleration = 1f;
@@ -26,6 +24,18 @@ public class PlayerMove
     [Tooltip("移動の減速度")]
     [SerializeField]
     private float _stopDeceleration = 1f;
+
+    [Tooltip("停止時の向き変更を停止する際のアニメーションのブレンド速度")]
+    [SerializeField]
+    private float _turnAnimationBlendSpeed = 0.8f;
+
+    [Tooltip("回転を実行する角度")]
+    [SerializeField]
+    private float _executeTurnAngle = 90f;
+
+    [Tooltip("連続で回転を実行する角度")]
+    [SerializeField]
+    private float _executeContinueTurnAngle = 10f;
 
     private Rigidbody _rb;
     private Transform _transform;
@@ -40,14 +50,19 @@ public class PlayerMove
     private Vector3 _currentVeclocity;
 
     // ===回転速度関係の変数群===
-    private Quaternion _prevRotation;
-    private float _prevTurnSpeed1;
-    private float _prevTurnSpeed2;
+    public Quaternion _targetRotation;
+    public float _targetAngle;
+    public float _currentCameraAngle;
+
+    public float _currentAngularVelocity;
+    public bool _isRotation = false;
+    public bool _isRotationFinish = false;
+    public bool _isRightTurn = false;
 
     private float _turnSpeed;
+    // 回転の速度 -1~1の範囲
     public float TurnSpeed => _turnSpeed;
 
-    private float _currentAngularVelocity;
 
 
     public void Initialized(Rigidbody rb, Transform transform)
@@ -56,7 +71,12 @@ public class PlayerMove
         _transform = transform;
 
         _currentMoveSpeed = 0;
-        _prevRotation = _rb.rotation;
+
+        _targetRotation = _transform.rotation;
+        _targetAngle = _transform.rotation.eulerAngles.y;
+        _currentAngularVelocity = 0f;
+        _isRotation = false;
+        _isRotationFinish = false;
     }
 
     /// <summary>
@@ -102,7 +122,19 @@ public class PlayerMove
     /// </summary>
     public void LookRotationCameraDirMoveState()
     {
-        LookRotationCameraDir(_moveRotationSpeed, out bool _, out float _);
+        var deltaTime = Time.deltaTime;
+
+        // プレイヤーの向きを変更
+        Vector3 lookDir = Camera.main.transform.forward;
+        lookDir.y = 0f;
+        //向きを徐々に変更
+        Quaternion changeRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        //第1引数のQuaternionを第２引数のQuaternionまで第３引数の速度で変化
+        _transform.rotation =
+            Quaternion.RotateTowards(
+                _transform.rotation,
+                changeRotation,
+                _moveRotationSpeed * deltaTime);
     }
 
     /// <summary>
@@ -112,58 +144,75 @@ public class PlayerMove
     {
         var deltaTime = Time.deltaTime;
 
-        LookRotationCameraDir(_stopRotationSpeed, out bool isRotation, out float angle);
-
-        if (isRotation)
-        {
-            // 徐々に加速させる
-            _currentAngularVelocity += deltaTime / _turnAnimationBlendSpeed;
-            _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
-            angle = Mathf.Clamp(angle, -1f, 1f);
-            _turnSpeed = Mathf.Lerp(_prevTurnSpeed2, angle, _currentAngularVelocity);
-
-            _prevTurnSpeed1 = _turnSpeed;
-        }
-        else
-        {
-            // 徐々に減速させる
-            _currentAngularVelocity -= deltaTime / _turnAnimationBlendSpeed;
-            _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
-            _turnSpeed = Mathf.Lerp(0f, _prevTurnSpeed1, _currentAngularVelocity);
-
-            _prevTurnSpeed2 = _turnSpeed;
-        }     
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="rotationSpeed"></param>
-    /// <returns>bool=回転をしているか  float=回転角度</returns>
-    private void LookRotationCameraDir(float rotationSpeed, out bool isRotation, out float angle)
-    {
-        var deltaTime = Time.deltaTime;
-
-        // プレイヤーの向きを変更する
+        // プレイヤーの向きとカメラの向きとの回転角度を計算
         Vector3 lookDir = Camera.main.transform.forward;
         lookDir.y = 0f;
-        //向きを徐々に変更する
-        Quaternion changeRotation = Quaternion.LookRotation(lookDir, Vector3.up);
-        //第1引数のQuaternionを第２引数のQuaternionまで第３引数の速度で変化させる
-        _transform.rotation =
-            Quaternion.RotateTowards(
-                _transform.rotation,
-                changeRotation,
-                rotationSpeed * deltaTime);
+        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        float targetAngle = cameraRotation.eulerAngles.y - _transform.rotation.eulerAngles.y;
+        _currentCameraAngle = targetAngle;
 
-        // プレイヤーの回転速度を計算する
-        var currentRotation = _transform.rotation;
+        if (_isRotation)
+        {
+            //第1引数のQuaternionを第２引数のQuaternionまで第３引数の速度で変化
+            _transform.rotation =
+                Quaternion.RotateTowards(
+                    _transform.rotation,
+                    _targetRotation,
+                    _stopRotationSpeed * deltaTime * _currentAngularVelocity);
 
-        // 角度の変化がx度以上なら回転していると判定する
-        angle = currentRotation.eulerAngles.y - _prevRotation.eulerAngles.y;
-        isRotation = Mathf.Abs(angle) > 0.1f;
+            float currentAngle = _targetRotation.eulerAngles.y - _transform.rotation.eulerAngles.y;
 
-        // 前フレームの姿勢を更新
-        _prevRotation = currentRotation;
+            if (!_isRotationFinish)
+            {
+                _currentAngularVelocity += deltaTime / _turnAnimationBlendSpeed;
+                if (Mathf.Abs(currentAngle) <= 5f)
+                {
+                    _isRotationFinish = true;
+                }
+            }
+            else
+            {
+                _currentAngularVelocity -= deltaTime / _turnAnimationBlendSpeed;
+                if (Mathf.Abs(currentAngle) <= 0.1f && _currentAngularVelocity <= 0f)
+                {
+                    _isRotation = false;
+                    _isRotationFinish = false;
+                }
+            }
+            _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
+
+            // TODO:回転の方向をどうにかする
+
+            if (_isRightTurn)
+            {
+                _turnSpeed = Mathf.Lerp(0f, 1f, _currentAngularVelocity);
+            }
+            else
+            {
+                _turnSpeed = Mathf.Lerp(0f, -1f, _currentAngularVelocity);
+            }          
+        }
+
+        // 現在の回転方向の反対だったらリターン
+        if (_isRotation && _isRightTurn && targetAngle - _targetAngle < 0f ||
+            _isRotation && !_isRightTurn && targetAngle - _targetAngle > 0f)
+        {
+            return;
+        }
+
+        // 角度が一定以上ならば目標角度を更新
+        if (Mathf.Abs(targetAngle) > _executeTurnAngle ||
+            Mathf.Abs(targetAngle) > _executeContinueTurnAngle && _isRotation)
+        {
+            _targetRotation = cameraRotation;
+            _targetAngle = targetAngle;
+            _isRotationFinish = false;
+
+            // 回転中でなければ回転を開始
+            if (!_isRotation)
+            {
+                _isRotation = true;
+            }
+        }
     }
 }

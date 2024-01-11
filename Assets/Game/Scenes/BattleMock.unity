@@ -136,8 +136,20 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._executeTurnAngle
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._stopRotationSpeed
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
       propertyPath: _move._turnAnimationBlendSpeed
-      value: 0.8
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._executeContinueTurnAngle
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
       propertyPath: _move._stopRotationDeceleration
@@ -335,7 +347,7 @@ Transform:
   m_GameObject: {fileID: 753208836}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.61570495, y: 1.9, z: -1.5}
+  m_LocalPosition: {x: 0.6164611, y: 1.9, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -905,7 +917,7 @@ Transform:
   m_GameObject: {fileID: 1497706972}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.61570495, y: 1.9, z: -1.5}
+  m_LocalPosition: {x: 0.6164611, y: 1.9, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
