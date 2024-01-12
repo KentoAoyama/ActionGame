@@ -2,8 +2,10 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 using Zenject;
+using Application;
+using Domain;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPlayerComponent
 {
     [Tooltip("PlayerのRigidbody")]
     [SerializeField]
@@ -31,18 +33,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private PlayerStateMachine _stateMachine = new();
-    /// <summary>
-    /// PlayerのStateを管理するクラス
-    /// </summary>
-    public PlayerStateMachine StateMachine => _stateMachine;
 
     /// <summary>
     /// 入力を受け取るインターフェース
     /// </summary>
     [Inject]
-    private readonly IInputProvider _input;
+    private readonly IBattleInputProvider _input;
 
-    public IInputProvider Input => _input;
+    public IBattleInputProvider Input => _input;
 
     /// <summary>
     /// クラスの初期化処理を行う

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInputProvider : IInputProvider
+public class BattleInputProvider : IBattleInputProvider
 {
     public Vector2 GetMoveDir()
     {

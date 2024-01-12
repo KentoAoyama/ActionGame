@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Presentation
+namespace Domain
 {
     public interface IUIComponent
     {

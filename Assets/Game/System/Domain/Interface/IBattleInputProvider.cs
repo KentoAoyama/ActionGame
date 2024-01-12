@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IInputProvider
+public interface IBattleInputProvider
 {
     /// <summary>
     /// ˆÚ“®•ûŒü‚Ì“ü—Íˆ—
