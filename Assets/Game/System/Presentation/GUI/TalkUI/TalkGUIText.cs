@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using Domain;
 
 namespace Presentation
 {

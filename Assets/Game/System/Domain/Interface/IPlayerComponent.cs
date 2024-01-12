@@ -2,7 +2,7 @@
 {
     public interface IPlayerComponent
     {
-        IBattleInputProvider Input { get; }
+        IBattleInput Input { get; }
 
         void Move();
 

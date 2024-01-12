@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 282095076}
   - component: {fileID: 282095077}
   m_Layer: 0
-  m_Name: IngameContext
+  m_Name: BattleContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
