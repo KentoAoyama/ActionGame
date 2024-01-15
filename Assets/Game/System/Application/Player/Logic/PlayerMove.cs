@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
@@ -52,6 +50,7 @@ public class PlayerMove
     // ===回転速度関係の変数群===
     public Quaternion _targetRotation;
     public float _targetAngle;
+    public float _currentAngle;
     public float _currentCameraAngle;
 
     public float _currentAngularVelocity;
@@ -74,6 +73,7 @@ public class PlayerMove
 
         _targetRotation = _transform.rotation;
         _targetAngle = _transform.rotation.eulerAngles.y;
+        _currentAngle = _transform.rotation.eulerAngles.y;
         _currentAngularVelocity = 0f;
         _isRotation = false;
         _isRotationFinish = false;
@@ -144,28 +144,21 @@ public class PlayerMove
     {
         var deltaTime = Time.deltaTime;
 
-        // プレイヤーの向きとカメラの向きとの回転角度を計算
-        Vector3 lookDir = Camera.main.transform.forward;
-        lookDir.y = 0f;
-        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
-        float targetAngle = cameraRotation.eulerAngles.y - _transform.rotation.eulerAngles.y;
-        _currentCameraAngle = targetAngle;
-
         if (_isRotation)
         {
-            //第1引数のQuaternionを第２引数のQuaternionまで第３引数の速度で変化
-            _transform.rotation =
-                Quaternion.RotateTowards(
-                    _transform.rotation,
-                    _targetRotation,
-                    _stopRotationSpeed * deltaTime * _currentAngularVelocity);
+            ChangeValue(
+                ref _currentAngle, 
+                _targetAngle, 
+                _stopRotationSpeed * deltaTime * _currentAngularVelocity);
 
-            float currentAngle = _targetRotation.eulerAngles.y - _transform.rotation.eulerAngles.y;
+            _transform.rotation = Quaternion.Euler(0f, _currentAngle, 0f);
+            // ターゲットの角度との差分を計算
+            float angle = Mathf.Abs(_currentAngle) - Mathf.Abs(_targetAngle);
 
             if (!_isRotationFinish)
             {
                 _currentAngularVelocity += deltaTime / _turnAnimationBlendSpeed;
-                if (Mathf.Abs(currentAngle) <= 5f)
+                if (angle < 10f)
                 {
                     _isRotationFinish = true;
                 }
@@ -173,15 +166,13 @@ public class PlayerMove
             else
             {
                 _currentAngularVelocity -= deltaTime / _turnAnimationBlendSpeed;
-                if (Mathf.Abs(currentAngle) <= 0.1f && _currentAngularVelocity <= 0f)
+                if (angle <= 0.1f && _currentAngularVelocity <= 0f)
                 {
                     _isRotation = false;
                     _isRotationFinish = false;
                 }
             }
             _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
-
-            // TODO:回転の方向をどうにかする
 
             if (_isRightTurn)
             {
@@ -190,29 +181,142 @@ public class PlayerMove
             else
             {
                 _turnSpeed = Mathf.Lerp(0f, -1f, _currentAngularVelocity);
-            }          
+            }
         }
 
-        // 現在の回転方向の反対だったらリターン
-        if (_isRotation && _isRightTurn && targetAngle - _targetAngle < 0f ||
-            _isRotation && !_isRightTurn && targetAngle - _targetAngle > 0f)
+        // プレイヤーの向きとカメラの向きとの回転角度を計算
+        Vector3 lookDir = Camera.main.transform.forward;
+        lookDir.y = 0f;
+        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        float cameraAngle = cameraRotation.eulerAngles.y;
+        // cameraAngleが-180~180の範囲になるので0~360の範囲に変換
+        if (cameraAngle < 0f)
+        {
+            cameraAngle += 360f;
+        }
+        _currentCameraAngle = (cameraAngle + _currentAngle) % 360;
+
+        //// 現在の回転方向の反対だったらリターン
+        if ()
         {
             return;
         }
 
-        // 角度が一定以上ならば目標角度を更新
-        if (Mathf.Abs(targetAngle) > _executeTurnAngle ||
-            Mathf.Abs(targetAngle) > _executeContinueTurnAngle && _isRotation)
+        //// 角度が一定以上ならば目標角度を更新
+        if ()
         {
-            _targetRotation = cameraRotation;
-            _targetAngle = targetAngle;
+            _targetAngle = _currentCameraAngle % 360;
             _isRotationFinish = false;
 
             // 回転中でなければ回転を開始
             if (!_isRotation)
             {
                 _isRotation = true;
+
+                if (_currentAngle)
             }
         }
     }
+
+    private float ChangeValue(ref float angle, float targetAngle, float speed)
+    {
+        float resultAngle = angle;
+        float angleAbs = Mathf.Abs(angle);
+        float targetAngleAbs = Mathf.Abs(targetAngle);
+
+        if (angleAbs - targetAngleAbs > 0.1f)
+        {
+            if (angleAbs > targetAngleAbs)
+            {
+                resultAngle -= speed;
+            }
+            else
+            {
+                resultAngle += speed;
+            }
+        }
+        else
+        {
+            resultAngle = targetAngle;
+        }
+
+        return resultAngle % 360;
+    }
+
+    ///// <summary>
+    ///// 停止時時にカメラの向きに向きを変える処理
+    ///// </summary>
+    //public void LookRotationCameraDirIdleState()
+    //{
+    //    var deltaTime = Time.deltaTime;
+
+    //    if (_isRotation)
+    //    {
+    //        _currentAngle = ChangeValue(_currentAngle, _targetAngle, _turnSpeed * deltaTime * _currentAngularVelocity);
+    //        _transform.rotation = Quaternion.Euler(0f, _currentAngle, 0f);
+    //        // ターゲットの角度との差分を計算
+    //        float angle = Mathf.Abs(_currentAngle) - Mathf.Abs(_targetAngle);
+
+    //        if (!_isRotationFinish)
+    //        {
+    //            _currentAngularVelocity += deltaTime / _turnAnimationBlendSpeed;
+    //            if (angle < 10f)
+    //            {
+    //                _isRotationFinish = true;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            _currentAngularVelocity -= deltaTime / _turnAnimationBlendSpeed;
+    //            if (angle <= 0.1f && _currentAngularVelocity <= 0f)
+    //            {
+    //                _isRotation = false;
+    //                _isRotationFinish = false;
+    //            }
+    //        }
+    //        _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
+
+    //        if (_isRightTurn)
+    //        {
+    //            _turnSpeed = Mathf.Lerp(0f, 1f, _currentAngularVelocity);
+    //        }
+    //        else
+    //        {
+    //            _turnSpeed = Mathf.Lerp(0f, -1f, _currentAngularVelocity);
+    //        }
+    //    }
+
+    //    // プレイヤーの向きとカメラの向きとの回転角度を計算
+    //    Vector3 lookDir = Camera.main.transform.forward;
+    //    lookDir.y = 0f;
+    //    Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+    //    float cameraAngle = cameraRotation.eulerAngles.y;
+    //    // cameraAngleが0~360の範囲になるので-180~180の範囲に変換
+    //    if (cameraAngle > 180f)
+    //    {
+    //        cameraAngle -= 360f;
+    //    }
+    //    _currentCameraAngle = cameraAngle + _currentAngle;
+
+    //    // 現在の回転方向の反対だったらリターン
+    //    if (_isRotation && _isRightTurn && _currentCameraAngle - _targetAngle < 0f ||
+    //        _isRotation && !_isRightTurn && _currentCameraAngle - _targetAngle > 0f)
+    //    {
+    //        return;
+    //    }
+
+    //    // 角度が一定以上ならば目標角度を更新
+    //    if (Mathf.Abs(_currentAngle) > _executeTurnAngle ||
+    //        Mathf.Abs(cameraAngle) > _executeContinueTurnAngle && _isRotation)
+    //    {
+    //        _targetAngle = cameraAngle;
+    //        _isRotationFinish = false;
+
+    //        // 回転中でなければ回転を開始
+    //        if (!_isRotation)
+    //        {
+    //            _isRotation = true;
+    //        }
+    //    }
+    //}
 }
