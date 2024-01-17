@@ -144,13 +144,25 @@ public class PlayerMove
     {
         var deltaTime = Time.deltaTime;
 
+        // プレイヤーの向きとカメラの向きとの回転角度を計算
+        Vector3 lookDir = Camera.main.transform.forward;
+        lookDir.y = 0f;
+        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        float cameraAngle = cameraRotation.eulerAngles.y;
+        float currentAngle = _transform.rotation.eulerAngles.y;
+        // 0~360の範囲に変換
+        cameraAngle = (cameraAngle + 360f) % 360f;
+        currentAngle = (currentAngle + 360f) % 360f;
+
+        // 右左どちらの回転方向になるかを判定
+        RotationDirCheck(currentAngle, cameraAngle, ref _isRightTurn);
+
+        // 目標角度の更新・判定を行う
+        // 角度が一定以上ならば目標角度を更新
+        
+
         if (_isRotation)
         {
-            ChangeValue(
-                ref _currentAngle, 
-                _targetAngle, 
-                _stopRotationSpeed * deltaTime * _currentAngularVelocity);
-
             _transform.rotation = Quaternion.Euler(0f, _currentAngle, 0f);
             // ターゲットの角度との差分を計算
             float angle = Mathf.Abs(_currentAngle) - Mathf.Abs(_targetAngle);
@@ -183,140 +195,49 @@ public class PlayerMove
                 _turnSpeed = Mathf.Lerp(0f, -1f, _currentAngularVelocity);
             }
         }
-
-        // プレイヤーの向きとカメラの向きとの回転角度を計算
-        Vector3 lookDir = Camera.main.transform.forward;
-        lookDir.y = 0f;
-        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
-        float cameraAngle = cameraRotation.eulerAngles.y;
-        // cameraAngleが-180~180の範囲になるので0~360の範囲に変換
-        if (cameraAngle < 0f)
-        {
-            cameraAngle += 360f;
-        }
-        _currentCameraAngle = (cameraAngle + _currentAngle) % 360;
-
-        //// 現在の回転方向の反対だったらリターン
-        if ()
-        {
-            return;
-        }
-
-        //// 角度が一定以上ならば目標角度を更新
-        if ()
-        {
-            _targetAngle = _currentCameraAngle % 360;
-            _isRotationFinish = false;
-
-            // 回転中でなければ回転を開始
-            if (!_isRotation)
-            {
-                _isRotation = true;
-
-                if (_currentAngle)
-            }
-        }
     }
 
-    private float ChangeValue(ref float angle, float targetAngle, float speed)
+    private void RotationDirCheck(float currentAngle, float cameraAngle, ref bool isRightTurn)
     {
-        float resultAngle = angle;
-        float angleAbs = Mathf.Abs(angle);
-        float targetAngleAbs = Mathf.Abs(targetAngle);
+        bool beforeIsRightTurn = isRightTurn;
 
-        if (angleAbs - targetAngleAbs > 0.1f)
+        // 右に回転するか左に回転するかを判定する 0~360の範囲で角度が渡されることを考慮する
+        if (currentAngle - cameraAngle < 0)
         {
-            if (angleAbs > targetAngleAbs)
+            // 現在の角度よりターゲットの角度が大きい場合
+            // ターゲットの角度から現在の角度を引いた値が180度より大きい場合左回転
+            if (currentAngle - cameraAngle > 180f)
             {
-                resultAngle -= speed;
+                isRightTurn = false;
+
             }
             else
             {
-                resultAngle += speed;
+                isRightTurn = true;
             }
         }
-        else
+        else if (currentAngle - cameraAngle > 0)
         {
-            resultAngle = targetAngle;
+            // 現在の角度よりターゲットの角度が小さい場合
+            // 現在の角度からターゲットの角度を引いた値が180度より大きい場合右回転
+            if (cameraAngle - currentAngle > 180f)
+            {
+                isRightTurn = true;
+            }
+            else
+            {
+                isRightTurn = false;
+            }
         }
 
-        return resultAngle % 360;
+        // 回転方向が変わった場合return
+        if (beforeIsRightTurn != isRightTurn) return;
+
+        UpdateTargetAngleCheck(currentAngle, cameraAngle, ref isRightTurn);
     }
 
-    ///// <summary>
-    ///// 停止時時にカメラの向きに向きを変える処理
-    ///// </summary>
-    //public void LookRotationCameraDirIdleState()
-    //{
-    //    var deltaTime = Time.deltaTime;
-
-    //    if (_isRotation)
-    //    {
-    //        _currentAngle = ChangeValue(_currentAngle, _targetAngle, _turnSpeed * deltaTime * _currentAngularVelocity);
-    //        _transform.rotation = Quaternion.Euler(0f, _currentAngle, 0f);
-    //        // ターゲットの角度との差分を計算
-    //        float angle = Mathf.Abs(_currentAngle) - Mathf.Abs(_targetAngle);
-
-    //        if (!_isRotationFinish)
-    //        {
-    //            _currentAngularVelocity += deltaTime / _turnAnimationBlendSpeed;
-    //            if (angle < 10f)
-    //            {
-    //                _isRotationFinish = true;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            _currentAngularVelocity -= deltaTime / _turnAnimationBlendSpeed;
-    //            if (angle <= 0.1f && _currentAngularVelocity <= 0f)
-    //            {
-    //                _isRotation = false;
-    //                _isRotationFinish = false;
-    //            }
-    //        }
-    //        _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
-
-    //        if (_isRightTurn)
-    //        {
-    //            _turnSpeed = Mathf.Lerp(0f, 1f, _currentAngularVelocity);
-    //        }
-    //        else
-    //        {
-    //            _turnSpeed = Mathf.Lerp(0f, -1f, _currentAngularVelocity);
-    //        }
-    //    }
-
-    //    // プレイヤーの向きとカメラの向きとの回転角度を計算
-    //    Vector3 lookDir = Camera.main.transform.forward;
-    //    lookDir.y = 0f;
-    //    Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
-    //    float cameraAngle = cameraRotation.eulerAngles.y;
-    //    // cameraAngleが0~360の範囲になるので-180~180の範囲に変換
-    //    if (cameraAngle > 180f)
-    //    {
-    //        cameraAngle -= 360f;
-    //    }
-    //    _currentCameraAngle = cameraAngle + _currentAngle;
-
-    //    // 現在の回転方向の反対だったらリターン
-    //    if (_isRotation && _isRightTurn && _currentCameraAngle - _targetAngle < 0f ||
-    //        _isRotation && !_isRightTurn && _currentCameraAngle - _targetAngle > 0f)
-    //    {
-    //        return;
-    //    }
-
-    //    // 角度が一定以上ならば目標角度を更新
-    //    if (Mathf.Abs(_currentAngle) > _executeTurnAngle ||
-    //        Mathf.Abs(cameraAngle) > _executeContinueTurnAngle && _isRotation)
-    //    {
-    //        _targetAngle = cameraAngle;
-    //        _isRotationFinish = false;
-
-    //        // 回転中でなければ回転を開始
-    //        if (!_isRotation)
-    //        {
-    //            _isRotation = true;
-    //        }
-    //    }
-    //}
+    private void UpdateTargetAngleCheck(float currentAngle, float cameraAngle, ref bool isRightTurn)
+    {
+        
+    }
 }
