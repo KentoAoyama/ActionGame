@@ -140,8 +140,12 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
+      propertyPath: _move._stopDeceleration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
       propertyPath: _move._stopRotationSpeed
-      value: 150
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 919132148177967800, guid: f659a755b987a1a42a94497dbfdf831b, type: 3}
       propertyPath: _move._turnAnimationBlendSpeed
