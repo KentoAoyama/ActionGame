@@ -122,7 +122,7 @@ public class PlayerMove
         {
             // 徐々に加速させる
             _currentAngularVelocity += deltaTime / _turnAnimationBlendAcceleration;
-            _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
+            _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
             _turnSpeed = Mathf.Lerp(_prevTurnSpeed2, rotationDir, _currentAngularVelocity);
 
             _prevTurnSpeed1 = _turnSpeed;
@@ -131,7 +131,7 @@ public class PlayerMove
         {
             // 徐々に減速させる
             _currentAngularVelocity -= deltaTime / _turnAnimationBlendDeceleration;
-            _currentAngularVelocity = Mathf.Clamp01(_currentAngularVelocity);
+            _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
             _turnSpeed = Mathf.Lerp(0f, _prevTurnSpeed1, _currentAngularVelocity);
 
             _prevTurnSpeed2 = _turnSpeed;
@@ -163,7 +163,7 @@ public class PlayerMove
             Quaternion.RotateTowards(
                 _transform.rotation,
                 cameraRotation,
-                rotationSpeed * deltaTime);
+                rotationSpeed * _currentAngularVelocity);
 
         // プレイヤーの回転速度を計算する
         var currentRotation = _transform.rotation;
@@ -176,13 +176,8 @@ public class PlayerMove
         currentAngle = (currentAngle + 360f) % 360f;
 
         // 回転が行われているか判定
-        rotationDir = currentAngle - beforeAngle;
-        isRotation = Mathf.Abs(rotationDir) > 0.1f;
-
-        if (!isRotation)
-        {
-            return;
-        }
+        isRotation = Mathf.Abs(currentAngle - beforeAngle) > 0.1f;
+        rotationDir = 0f;
 
         // 右に回転しているかか左に回転しているかを判定する 0~360の範囲で角度が渡されることを考慮する
         // 現在の角度と前のフレームの角度の差分を計算
