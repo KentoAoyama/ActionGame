@@ -44,14 +44,14 @@ public class PlayerMove
     private Vector3 _currentVeclocity;
 
     // ===‰ñ“]‘¬“xŠÖŒW‚Ì•Ï”ŒQ===
-    public Quaternion _prevRotation;
-    public float _prevTurnSpeed1;
-    public float _prevTurnSpeed2;
+    private Quaternion _prevRotation;
+    private float _prevTurnSpeed1;
+    private float _prevTurnSpeed2;
 
-    public float _turnSpeed;
+    private float _turnSpeed;
     public float TurnSpeed => _turnSpeed;
 
-    public float _currentAngularVelocity;
+    private float _currentAngularVelocity;
 
 
     public void Initialized(Rigidbody rb, Transform transform)

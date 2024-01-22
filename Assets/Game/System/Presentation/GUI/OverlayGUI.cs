@@ -8,7 +8,7 @@ namespace Presentation
     /// <summary>
     /// オーバーレイ表示のUIを管理するクラス
     /// </summary>
-    public class PrepareGUI : MonoBehaviour, IPrepareGUI
+    public class OverlayGUI : MonoBehaviour, IOverlayGUI
     {
         [SerializeField]
         private TalkGUI _overlayTalkUI;

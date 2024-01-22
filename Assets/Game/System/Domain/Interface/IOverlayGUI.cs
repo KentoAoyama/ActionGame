@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Domain
 {
-    public interface IPrepareGUI
+    public interface IOverlayGUI
     {
 
     }

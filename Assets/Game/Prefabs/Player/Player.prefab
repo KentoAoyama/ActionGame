@@ -2269,10 +2269,12 @@ MonoBehaviour:
   _transform: {fileID: 8984843295367681673}
   _move:
     _speed: 7
-    _rotationSpeed: 200
+    _moveRotationSpeed: 4
+    _stopRotationSpeed: 1
+    _turnAnimationBlendAcceleration: 0.8
+    _turnAnimationBlendDeceleration: 0.8
     _moveAcceleration: 0.8
-    _stopAcceleration: 0.4
-    _currentMoveSpeed: 0
+    _moveDeceleration: 1
   _attack:
     _bullet: {fileID: 8586260501902291268, guid: cf074b0995b779f4fbe04e2568d12fc5, type: 3}
     _rayLength: 10000

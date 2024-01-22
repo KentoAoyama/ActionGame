@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Game/Scenes/Mock/PrepareUIMock.unity
+    path: Assets/Game/Scenes/Debug/DebugRootScene.unity
+    guid: 186cf76fbac7e5047bf2b2d171e128ab
+  - enabled: 1
+    path: Assets/Game/Scenes/Mock/BattleMock.unity
+    guid: 958ab214dc524f64d9320ddf05092c17
+  - enabled: 1
+    path: Assets/Game/Scenes/Mock/BarMock.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
