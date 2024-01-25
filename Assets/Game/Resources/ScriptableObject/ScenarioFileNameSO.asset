@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ScenarioFileNameSO
   m_EditorClassIdentifier: 
   FileNames:
-  - Story1
+  - StorySheetTest_Story1

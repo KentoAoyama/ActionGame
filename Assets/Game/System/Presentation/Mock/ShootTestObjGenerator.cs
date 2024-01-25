@@ -25,16 +25,28 @@ public class ShootTestObjGenerator : MonoBehaviour
 
     private IEnumerator Generate()
     {
+        if (_generatePositions.Length == 0)
+        {
+            yield break;
+        }
+
         while (true)
         {
             yield return new WaitForSeconds(_generateInterval);
 
+            var generatePos = _generatePositions[Random.Range(0, _generatePositions.Length)];
+
+            if (generatePos == null)
+            {
+                yield break;
+            }
+
             ShootTestObj shootTestObj = Instantiate(
                 _shootTestObjPrefab, 
-                _generatePositions[Random.Range(0, _generatePositions.Length)].position,
+                generatePos.position,
                 Quaternion.identity);
 
-            shootTestObj.transform.SetParent(transform);
+            //shootTestObj.transform.SetParent();
 
             shootTestObj.Initialized();
         }

@@ -17,11 +17,11 @@ public class PlayerMove
 
     [Tooltip("停止時の向き変更を行う際のアニメーションのブレンド速度")]
     [SerializeField]
-    private float _turnAnimationBlendAcceleration = 0.8f;
+    private float _turnAcceleration = 0.8f;
 
     [Tooltip("停止時の向き変更を停止する際のアニメーションのブレンド速度")]
     [SerializeField]
-    private float _turnAnimationBlendDeceleration = 0.8f;
+    private float _turnDeceleration = 0.8f;
 
     [Tooltip("移動の加速度")]
     [SerializeField]
@@ -81,7 +81,7 @@ public class PlayerMove
             velocity.y = _rb.velocity.y;
 
             //移動の速度を球面線形補間する
-            _currentMoveSpeed += deltaTime / _moveAcceleration;
+            _currentMoveSpeed += _moveAcceleration * deltaTime;
             _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
             Vector3 targetVelo = new(0f, _rb.velocity.y, 0f);
             velocity = Vector3.Slerp(targetVelo, velocity, _currentMoveSpeed);
@@ -93,7 +93,7 @@ public class PlayerMove
         }
         else
         {
-            _currentMoveSpeed -= deltaTime / _moveDeceleration;
+            _currentMoveSpeed -= _moveDeceleration * deltaTime;
             _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
             _rb.velocity = Vector3.Slerp(Vector3.zero, _currentVeclocity, _currentMoveSpeed);
         }
@@ -106,7 +106,7 @@ public class PlayerMove
     /// </summary>
     public void LookRotationCameraDirMoveState()
     {
-        LookRotationCameraDir(_moveRotationSpeed, out bool _, out float _);
+        //LookRotationCameraDir(_moveRotationSpeed, out bool _, out float _);
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class PlayerMove
         if (isRotation)
         {
             // 徐々に加速させる
-            _currentAngularVelocity += deltaTime / _turnAnimationBlendAcceleration;
+            _currentAngularVelocity += _turnAcceleration * deltaTime;
             _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
             _turnSpeed = Mathf.Lerp(_prevTurnSpeed2, rotationDir, _currentAngularVelocity);
 
@@ -130,7 +130,7 @@ public class PlayerMove
         else
         {
             // 徐々に減速させる
-            _currentAngularVelocity -= deltaTime / _turnAnimationBlendDeceleration;
+            _currentAngularVelocity -= _turnDeceleration * deltaTime;
             _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
             _turnSpeed = Mathf.Lerp(0f, _prevTurnSpeed1, _currentAngularVelocity);
 
@@ -163,7 +163,7 @@ public class PlayerMove
             Quaternion.RotateTowards(
                 _transform.rotation,
                 cameraRotation,
-                rotationSpeed * _currentAngularVelocity);
+                rotationSpeed * _currentAngularVelocity * deltaTime);
 
         // プレイヤーの回転速度を計算する
         var currentRotation = _transform.rotation;
