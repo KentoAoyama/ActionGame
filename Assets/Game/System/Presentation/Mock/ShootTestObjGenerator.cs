@@ -1,29 +1,89 @@
+using Domain;
+using Presentation;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 
 public class ShootTestObjGenerator : MonoBehaviour
 {
     [SerializeField]
     private Transform[] _generatePositions;
-    
+
     [SerializeField]
     private ShootTestObj _shootTestObjPrefab;
 
     [SerializeField]
     private float _generateInterval = 1f;
 
+    private IEnemysCompenent _enemysController;
+
     // コルーチンを保持しておくための変数
     private Coroutine _generateCoroutine;
 
     private void Start()
     {
-        // 後から終了できるようにコルーチンを保持しておく
-        _generateCoroutine = StartCoroutine(Generate());
+        _enemysController = FindObjectOfType<EnemysController>();
     }
 
-    private IEnumerator Generate()
+    public void GenerateAll()
+    {
+        // 生成位置の数だけ生成する
+        for (int i = 0; i < _generatePositions.Length; i++)
+        {
+            if (_generatePositions[i] == null)
+            {
+                continue;
+            }
+
+            if (_generatePositions[i].childCount > 0)
+            {
+                continue;
+            }
+
+            _enemysController.GenerateTestEnemy(_generatePositions[i]);
+        }
+    }
+
+    public void StartRandomGenerate()
+    {
+        // 後から終了できるようにコルーチンを保持しておく
+        _generateCoroutine = StartCoroutine(GenerateCoroutine());
+    }
+
+    public void StopRandomGenerate()
+    {
+        StopCoroutine(_generateCoroutine);
+    }
+
+    // 全てのShootTestObjを削除する
+    public void DestroyAll()
+    {
+        for (int i = 0; i < _generatePositions.Length; i++)
+        {
+            if (_generatePositions[i] == null)
+            {
+                continue;
+            }
+
+            if (_generatePositions[i].childCount == 0)
+            {
+                continue;
+            }
+
+            DestroyEnemy(_generatePositions[i].GetChild(0).gameObject);
+        }
+    }
+
+    private void DestroyEnemy(GameObject enemyObj)
+    {
+        IEnemyComponent enemyComponent = enemyObj.GetComponent<IEnemyComponent>();
+
+        _enemysController.RemoveEnemy(enemyComponent);
+        Destroy(enemyObj);
+    }
+
+    private IEnumerator GenerateCoroutine()
     {
         if (_generatePositions.Length == 0)
         {
@@ -34,27 +94,43 @@ public class ShootTestObjGenerator : MonoBehaviour
         {
             yield return new WaitForSeconds(_generateInterval);
 
-            var generatePos = _generatePositions[Random.Range(0, _generatePositions.Length)];
+            RandomGenerate();
+        }
+    }
+    private void RandomGenerate()
+    {
+        Transform generatePos = null;
+
+        for (int i = 0; i < _generatePositions.Length; i++)
+        {
+            generatePos = _generatePositions[i];
 
             if (generatePos == null)
             {
-                yield break;
+                continue;
             }
 
-            ShootTestObj shootTestObj = Instantiate(
-                _shootTestObjPrefab, 
-                generatePos.position,
-                Quaternion.identity);
+            if (generatePos.childCount > 0)
+            {
+                generatePos = null;
+                continue;
+            }
 
-            //shootTestObj.transform.SetParent();
+            break;
+        }     
 
-            shootTestObj.Initialized();
+        if (generatePos == null)
+        {
+            return;
         }
+
+        _enemysController.GenerateTestEnemy(generatePos);
     }
 
     // オブジェクトが破棄されたらコルーチンも終了させる
     private void OnDisable()
     {
-        StopCoroutine(_generateCoroutine);
+        if (_generateCoroutine != null)
+            StopCoroutine(_generateCoroutine);
     }
 }

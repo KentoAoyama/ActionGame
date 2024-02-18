@@ -22,14 +22,14 @@ public class LoadScenarioDataSO
             Resources.Load<ScenarioFileNameSO>("ScriptableObject/" + SCENARIOFILE_NAME);
 
         if (scenarioFileNameSO.FileNames == null)
-            throw new System.Exception("ScenarioFileNameSOが存在しません。");
+            throw new Exception("ScenarioFileNameSOが存在しません。");
 
         // ScenarioDataListSOをResourcesフォルダから取得
         ScenarioDataSOList scenarioDataSOList =
             Resources.Load<ScenarioDataSOList>("ScriptableObject/" + SCENARIOFILESO_NAME);
 
         if (scenarioDataSOList == null)
-            throw new System.Exception("ScenarioDataListSOが存在しません。");
+            throw new Exception("ScenarioDataListSOが存在しません。");
 
         // シナリオデータを格納するDictionaryとInspectorに表示するシナリオデータのリストを作成
         Dictionary<string, ScenarioDataSO> scenarioDataDictionary = new();
@@ -42,7 +42,7 @@ public class LoadScenarioDataSO
             TextAsset textAsset = Resources.Load<TextAsset>("TextData/" + fileName);
 
             if (textAsset == null)
-                throw new System.Exception("CSVファイルが存在しません。");
+                throw new Exception("CSVファイルが存在しません。");
 
             StringReader reader = new(textAsset.text);
             // StringReaderからScenarioDataを作成
@@ -143,7 +143,7 @@ public class LoadScenarioDataSO
                     eventCodeTypes[i] = EventCodeType.None;
                     break;
                 default:
-                    throw new System.Exception("イベントコードが不正です");
+                    throw new Exception("イベントコードが不正です");
             }
         }
 
@@ -152,7 +152,7 @@ public class LoadScenarioDataSO
 
     private static int ConvertToInt(string data)
     {
-        Boolean isOk = Double.TryParse(data, out Double temp);
+        bool isOk = Double.TryParse(data, out Double temp);
         int value = isOk ? (int)temp : 0;
 
         return value;

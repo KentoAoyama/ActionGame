@@ -39,9 +39,14 @@ public class PlayerStateMachine
     /// </summary>
     public void Update()
     {
-        if (_currentState != null)
-        {
-            _currentState.Update();
-        }
+        _currentState?.Update();
+    }
+
+    /// <summary>
+    /// 現在のStateのFixedUpdate処理を行うメソッド
+    /// </summary>
+    public void FixedUpdate()
+    {
+        _currentState?.FixedUpdate();
     }
 }

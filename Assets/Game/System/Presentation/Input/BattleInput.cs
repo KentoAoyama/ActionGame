@@ -22,5 +22,10 @@ namespace Presentation
         {
             return Input.GetButton("Fire1");
         }
+
+        public bool GetAim()
+        {
+            return Input.GetButton("Fire2");
+        }
     }
 }

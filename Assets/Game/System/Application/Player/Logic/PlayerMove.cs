@@ -35,7 +35,7 @@ public class PlayerMove
     private Transform _transform;
 
     // ===移動速度関係の変数群==
-    private float _currentMoveSpeed = 0f;
+    public float _currentMoveSpeed = 0f;
     public float CurrentMoveSpeed => _currentMoveSpeed;
 
     private Vector3 _localMoveDir;
@@ -48,7 +48,7 @@ public class PlayerMove
     private float _prevTurnSpeed1;
     private float _prevTurnSpeed2;
 
-    private float _turnSpeed;
+    public float _turnSpeed;
     public float TurnSpeed => _turnSpeed;
 
     private float _currentAngularVelocity;
@@ -68,21 +68,20 @@ public class PlayerMove
     /// </summary>
     public void Move(Vector2 inputDir)
     {
-        var deltaTime = Time.deltaTime;
-
         //入力があるかどうか確認
         if (inputDir != Vector2.zero)
         {
             //移動をする方向をカメラの向きを参照したものにする
-            var velocity = Vector3.right * inputDir.x + Vector3.forward * inputDir.y;
+            var velocity = 
+                Vector3.right * inputDir.x + Vector3.forward * inputDir.y;
             velocity = Camera.main.transform.TransformDirection(velocity);
             velocity.y = 0f;
             velocity = _speed * velocity.normalized;
             velocity.y = _rb.velocity.y;
 
             //移動の速度を球面線形補間する
-            _currentMoveSpeed += _moveAcceleration * deltaTime;
-            _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
+            _currentMoveSpeed += _moveAcceleration;
+            _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed);
             Vector3 targetVelo = new(0f, _rb.velocity.y, 0f);
             velocity = Vector3.Slerp(targetVelo, velocity, _currentMoveSpeed);
 
@@ -93,12 +92,17 @@ public class PlayerMove
         }
         else
         {
-            _currentMoveSpeed -= _moveDeceleration * deltaTime;
-            _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed); //0から1の範囲にクランプ
-            _rb.velocity = Vector3.Slerp(Vector3.zero, _currentVeclocity, _currentMoveSpeed);
+            _currentMoveSpeed -= _moveDeceleration;
+            _currentMoveSpeed = Mathf.Clamp01(_currentMoveSpeed);
+            _rb.velocity = 
+                Vector3.Slerp(
+                    Vector3.zero, 
+                    _currentVeclocity,
+                    _currentMoveSpeed);
         }
 
-        _localMoveDir = _transform.InverseTransformDirection(_rb.velocity) / _speed;
+        _localMoveDir = 
+            _transform.InverseTransformDirection(_rb.velocity) / _speed;
     }
 
     /// <summary>
@@ -106,7 +110,7 @@ public class PlayerMove
     /// </summary>
     public void LookRotationCameraDirMoveState()
     {
-        //LookRotationCameraDir(_moveRotationSpeed, out bool _, out float _);
+        LookRotationCameraDir(_moveRotationSpeed, out bool _, out float _);
     }
 
     /// <summary>
@@ -114,25 +118,39 @@ public class PlayerMove
     /// </summary>
     public void LookRotationCameraDirIdleState()
     {
-        var deltaTime = Time.deltaTime;
-
-        LookRotationCameraDir(_stopRotationSpeed, out bool isRotation, out float rotationDir);
+        LookRotationCameraDir(
+            _stopRotationSpeed, 
+            out bool isRotation, 
+            out float rotationDir);
 
         if (isRotation)
         {
             // 徐々に加速させる
-            _currentAngularVelocity += _turnAcceleration * deltaTime;
-            _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
-            _turnSpeed = Mathf.Lerp(_prevTurnSpeed2, rotationDir, _currentAngularVelocity);
+            _currentAngularVelocity += _turnAcceleration;
+            _currentAngularVelocity = 
+                Mathf.Clamp(
+                    _currentAngularVelocity, 
+                    0.05f, 
+                    1f);
+            _turnSpeed =
+                Mathf.Lerp(
+                    _prevTurnSpeed2, 
+                    rotationDir, 
+                    _currentAngularVelocity);
 
             _prevTurnSpeed1 = _turnSpeed;
         }
         else
         {
             // 徐々に減速させる
-            _currentAngularVelocity -= _turnDeceleration * deltaTime;
-            _currentAngularVelocity = Mathf.Clamp(_currentAngularVelocity, 0.1f, 1f);
-            _turnSpeed = Mathf.Lerp(0f, _prevTurnSpeed1, _currentAngularVelocity);
+            _currentAngularVelocity -= _turnDeceleration;
+            _currentAngularVelocity = 
+                Mathf.Clamp(
+                    _currentAngularVelocity, 
+                    0.05f,
+                    1f);
+            _turnSpeed = 
+                Mathf.Lerp(0f, _prevTurnSpeed1, _currentAngularVelocity);
 
             _prevTurnSpeed2 = _turnSpeed;
 
@@ -151,19 +169,18 @@ public class PlayerMove
     /// <param name="rotationDir"></param>
     private void LookRotationCameraDir(float rotationSpeed, out bool isRotation, out float rotationDir)
     {
-        var deltaTime = Time.deltaTime;
-
         // プレイヤーの向きを変更する
         Vector3 lookDir = Camera.main.transform.forward;
         lookDir.y = 0f;
         //向きを徐々に変更する
-        Quaternion cameraRotation = Quaternion.LookRotation(lookDir, Vector3.up);
+        Quaternion cameraRotation = 
+            Quaternion.LookRotation(lookDir, Vector3.up);
         //第1引数のQuaternionを第２引数のQuaternionまで第３引数の速度で変化させる
         _transform.rotation =
             Quaternion.RotateTowards(
                 _transform.rotation,
                 cameraRotation,
-                rotationSpeed * _currentAngularVelocity * deltaTime);
+                rotationSpeed * _currentAngularVelocity);
 
         // プレイヤーの回転速度を計算する
         var currentRotation = _transform.rotation;

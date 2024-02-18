@@ -18,12 +18,12 @@ MonoBehaviour:
     _speakText: "\u3066\u3059\u3068\uFF11"
     _showTextTime: 1
     _eventType: 00000000
-  - _textPlace: 1
+  - _textPlace: 0
     _characterType: 1
     _speakText: "\u3066\u3059\u3068\uFF12"
     _showTextTime: 2
     _eventType: 00000000
-  - _textPlace: 1
+  - _textPlace: 0
     _characterType: 1
     _speakText: "\u3066\u3059\u3068\uFF13"
     _showTextTime: 3

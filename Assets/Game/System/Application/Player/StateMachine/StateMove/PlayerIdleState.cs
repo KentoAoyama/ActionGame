@@ -1,6 +1,4 @@
 using Domain;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -31,6 +29,10 @@ namespace Application
             }
 
             _player.Attack();
+        }
+
+        public void FixedUpdate()
+        {
             _player.Move();
             _player.LookRotationCameraDirIdleState();
         }

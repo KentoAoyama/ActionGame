@@ -15,5 +15,11 @@ namespace Domain
         /// </summary>
         /// <returns>攻撃の入力判定</returns>
         bool GetFire();
+
+        /// <summary>
+        /// エイムの入力判定
+        /// </summary>
+        /// <returns>エイムの入力判定</returns>
+        bool GetAim();
     }
 }

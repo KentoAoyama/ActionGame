@@ -1,14 +1,20 @@
 using UnityEngine;
+using Domain;
 
-
-public class ShootTestObj : MonoBehaviour
+namespace Presentation
 {
-    
-
-    public void Initialized()
+    public class ShootTestObj : MonoBehaviour, IEnemyComponent
     {
         
+
+        public void Initialized()
+        {
+
+        }
+
+        public void Disabled()
+        {
+
+        }
     }
-
-
 }

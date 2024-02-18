@@ -14,6 +14,11 @@ public interface IPlayerState
     void Update() { }
 
     /// <summary>
+    /// ‚±‚ÌState‚ÌFixedUpdateˆ—
+    /// </summary>
+    void FixedUpdate() { }
+
+    /// <summary>
     /// ‚±‚ÌState‚©‚ç•Ê‚ÌState‚É•ÏX‚³‚ê‚½Û‚ÉÀs‚·‚é
     /// </summary>
     void Exit() { }

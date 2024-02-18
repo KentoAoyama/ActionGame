@@ -50,20 +50,23 @@ namespace Presentation
         /// </summary>
         private void Start()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-
             _move.Initialized(_rb, _transform);
             _stateMachine.Initialized(new PlayerIdleState(this));
         }
 
         private void Update()
         {
+            _stateMachine.Update();
+        }
+
+        private void FixedUpdate()
+        {
+            _stateMachine.FixedUpdate();
+
             _animation.Update(
                _move.LocalMoveDir,
                _move.CurrentMoveSpeed,
                _move.TurnSpeed);
-
-            _stateMachine.Update();
         }
 
         /// <summary>
@@ -98,9 +101,8 @@ namespace Presentation
         public void Attack()
         {
             //_attack.BulletShoot(
-            //    _input.GetAim(),
-            //    _input.GetShoot(),
-            //    _transform);
+            //    _input.GetFire(),
+            //    _transform.position);
 
             //_attack.ShootPositionSet();
 
