@@ -11,9 +11,6 @@ public class ShootTestObjGenerator : MonoBehaviour
     private Transform[] _generatePositions;
 
     [SerializeField]
-    private ShootTestObj _shootTestObjPrefab;
-
-    [SerializeField]
     private float _generateInterval = 1f;
 
     private IEnemysCompenent _enemysController;

@@ -5,5 +5,7 @@ namespace Domain
         void Initialized();
 
         void Disabled();
+
+        UnityEngine.GameObject GetGameObject();
     }
 }

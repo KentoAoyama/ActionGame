@@ -25,5 +25,10 @@ namespace Application
         {
             _enemyComponents.Remove(enemyComponent);
         }
+
+        public List<IEnemyComponent> GetEnemyComponents()
+        {
+            return _enemyComponents;
+        }
     }
 }

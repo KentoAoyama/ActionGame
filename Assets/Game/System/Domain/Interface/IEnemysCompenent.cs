@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Domain
@@ -9,5 +10,7 @@ namespace Domain
         void GenerateTestEnemy(Transform generatePos);
 
         void RemoveEnemy(IEnemyComponent enemyComponent);
+
+        void RemoveAllEnemy();
     }
 }

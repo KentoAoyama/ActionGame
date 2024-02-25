@@ -1,21 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Domain;
 
 namespace Presentation
 {
-    public class BattleCanvas : MonoBehaviour
+    public class BattleCanvas : MonoBehaviour, IBattleCanvasService
     {
         [SerializeField]
         private CrosshairController _crosshairController;
 
-        [SerializeField]
-        private EnemyTargetAreas _enemyTargetAreas;
-
         public void Initialized()
         {
             _crosshairController.Initialized();
-            _enemyTargetAreas.Initialized();
         }
     }
 }

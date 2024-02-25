@@ -16,5 +16,10 @@ namespace Presentation
         {
 
         }
+
+        public GameObject GetGameObject()
+        {
+            return gameObject;
+        }
     }
 }

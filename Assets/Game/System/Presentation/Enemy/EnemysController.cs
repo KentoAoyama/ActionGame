@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Domain;
@@ -9,9 +8,9 @@ namespace Presentation
     public class EnemysController : MonoBehaviour, IEnemysCompenent
     {
         [SerializeField]
-        private EnemyGenerator enemyGenerator;
+        private EnemyGenerator _enemyGenerator;
 
-        private EnemysHolder enemysHolder;
+        private EnemysHolder _enemysHolder;
 
         public void Initialized()
         {
@@ -24,25 +23,35 @@ namespace Presentation
                 enemyComponents.Add(enemy);
             }
 
-            enemysHolder = new EnemysHolder(enemyComponents);
+            _enemysHolder = new EnemysHolder(enemyComponents);
         }
 
         public void GenerateEnemy(Transform generatePos)
         {
-            enemyGenerator.GenerateEnemy(generatePos);
-            enemysHolder.AddEnemy(enemyGenerator.GenerateEnemy(generatePos));
+            IEnemyComponent enemyComponent =Å@_enemyGenerator.GenerateEnemy(generatePos);
+            _enemysHolder.AddEnemy(enemyComponent);
+            
         }
 
         public void GenerateTestEnemy(Transform generatePos)
         {
-            enemyGenerator.GenerateTestEnemy(generatePos);
-            enemysHolder.AddEnemy(enemyGenerator.GenerateTestEnemy(generatePos));
+            IEnemyComponent enemyComponent = _enemyGenerator.GenerateTestEnemy(generatePos);
+            _enemysHolder.AddEnemy(enemyComponent);
         }
 
         public void RemoveEnemy(IEnemyComponent enemyComponent)
         {
             enemyComponent.Disabled();
-            enemysHolder.RemoveEnemy(enemyComponent);
+            _enemysHolder.RemoveEnemy(enemyComponent);
+        }
+
+        public void RemoveAllEnemy()
+        {
+            foreach (var enemy in _enemysHolder.GetEnemyComponents())
+            {
+                enemy.Disabled();
+                _enemysHolder.RemoveEnemy(enemy);
+            }
         }
     }
 }
